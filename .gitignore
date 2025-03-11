@@ -1,2 +1,7 @@
 __pycache__
+
 db.sqlite3
+
+# Ignorar todas las migraciones de Python (excepto __init__.py)
+citas/migrations/*.py
+!citas/migrations/__init__.py
