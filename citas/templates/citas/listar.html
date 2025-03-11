@@ -1,0 +1,61 @@
+{% extends "citas/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-3">Listado de Citas</h1>
+
+    <a href="{% url 'crear_cita' %}" class="btn btn-primary mb-3">Crear Nueva Cita</a>
+
+    <h2>Citas Activas</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Fecha y Hora</th>
+                <th>Paciente</th>
+                <th>Tipo de Cita</th>
+                <th>Médico</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cita in citas_activas %}
+            <tr>
+                <td>{{ cita.numero_cita }}</td>
+                <td>{{ cita.fecha_hora }}</td>
+                <td>{{ cita.paciente }}</td>
+                <td>{{ cita.tipo_cita }}</td>
+                <td>{{ cita.medico }}</td>
+                <td>
+                    <a href="{% url 'editar_cita' cita.numero_cita %}" class="btn btn-warning">Editar</a>
+                    <a href="{% url 'eliminar_cita' cita.numero_cita %}" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Citas Eliminadas</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Fecha y Hora</th>
+                <th>Paciente</th>
+                <th>Tipo de Cita</th>
+                <th>Médico</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cita in citas_eliminadas %}
+            <tr>
+                <td>{{ cita.numero_cita }}</td>
+                <td>{{ cita.fecha_hora }}</td>
+                <td>{{ cita.paciente }}</td>
+                <td>{{ cita.tipo_cita }}</td>
+                <td>{{ cita.medico }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "citas/base.html" %}
+{% block content %}
+< <div class="container-fluid mt-4"> 
+        <h1>Editar Cita</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Fecha y Hora -->
+            <div class="mb-3">
+                <label>Fecha y Hora:</label>
+                <input type="datetime-local" name="fecha_hora" class="form-control" value="{{ cita.fecha_hora|date:'Y-m-d\TH:i' }}" required>
+            </div>
+
+            <!-- Paciente -->
+            <div class="mb-3">
+                <label>Paciente:</label>
+                <input type="text" name="paciente" class="form-control" value="{{ cita.paciente }}" readonly>
+            </div>
+
+            <!-- Tipo de Cita -->
+            <div class="mb-3">
+                <label>Tipo de Cita:</label>
+                <select id="tipo_cita" name="tipo_cita" class="form-control" required onchange="toggleOtroTipo()">
+                    <option value="Consulta" {% if cita.tipo_cita == "Consulta" %}selected{% endif %}>Consulta</option>
+                    <option value="Servicio" {% if cita.tipo_cita == "Servicio" %}selected{% endif %}>Servicio</option>
+                    <option value="Tratamiento" {% if cita.tipo_cita == "Tratamiento" %}selected{% endif %}>Tratamiento</option>
+                    <option value="Otra" {% if cita.tipo_cita == "Otra" %}selected{% endif %}>Otra</option>
+                </select>
+            </div>
+
+            <!-- Campo adicional para "Otra" tipo de cita -->
+            <div class="mb-3" id="otro_tipo_div" style="display: none;">
+                <label>Especificar otro tipo de cita:</label>
+                <input type="text" name="tipo_cita_personalizado" id="tipo_cita_personalizado" class="form-control" value="{{ cita.tipo_cita_personalizado }}">
+            </div>
+
+            <!-- Médico -->
+            <div class="mb-3">
+                <label>Médico:</label>
+                <input type="text" name="medico" class="form-control" value="{{ cita.medico }}" required>
+            </div>
+
+            <!-- Botones -->
+            <button type="submit" class="btn btn-primary">Actualizar</button>
+            <a href="{% url 'listar_citas' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+
+        <script>
+            // Función para mostrar/ocultar el campo de "Especificar otro tipo de cita"
+            function toggleOtroTipo() {
+                var tipoCita = document.getElementById("tipo_cita").value;
+                var otroTipoDiv = document.getElementById("otro_tipo_div");
+                var otroTipoInput = document.getElementById("tipo_cita_personalizado");
+
+                if (tipoCita === "Otra") {
+                    otroTipoDiv.style.display = "block";
+                    otroTipoInput.required = true;  // Hace que el campo sea obligatorio si se selecciona "Otra"
+                } else {
+                    otroTipoDiv.style.display = "none";
+                    otroTipoInput.required = false;  // Desmarca como obligatorio cuando no es "Otra"
+                }
+            }
+
+            // Ejecutar al cargar la página para verificar si "Otra" ya está seleccionado
+            window.onload = toggleOtroTipo;
+        </script>
+    </div>
+{% endblock %}
+
